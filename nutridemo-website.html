@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NutriDemo | Clinical Nutritionist — Nourish Your Body, Transform Your Life</title>
+<meta name="description" content="Personalized nutrition plans for PCOS, weight management, thyroid, diabetes & overall wellness. Book a consultation with NutriDemo.">
+
+<!-- Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=Work+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<!-- Tailwind -->
+<script src="https://cdn.tailwindcss.com"></script>
+
+<!-- Font Awesome (icons) -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<!-- GSAP -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          forest: '#1E3D2B',
+          forestDeep: '#152B1F',
+          sage: '#8A9A7E',
+          sageLight: '#EAEEE3',
+          cream: '#F6F1E7',
+          ivory: '#FEFCF7',
+          gold: '#C9A659',
+          goldDeep: '#AD8A3E',
+          charcoal: '#2B2A25'
+        },
+        fontFamily: {
+          display: ['Fraunces', 'serif'],
+          body: ['"Work Sans"', 'sans-serif']
+        },
+        borderRadius: {
+          'xl2': '1.75rem'
+        }
+      }
+    }
+  }
+</script>
+
+<style>
+  :root{ scroll-behavior: smooth; }
+  * { -webkit-font-smoothing: antialiased; }
+  body { font-family: 'Work Sans', sans-serif; color:#2B2A25; background:#F6F1E7; overflow-x:hidden; }
+  h1,h2,h3, .font-display { font-family: 'Fraunces', serif; }
+
+  .eyebrow{ letter-spacing: 0.22em; }
+
+  /* ---------- Hero split reveal ---------- */
+  #hero-reveal-overlay{
+    position: fixed; inset: 0; z-index: 100;
+    background: #F6F1E7;
+  }
+  .reveal-half{
+    position: absolute; top:0; height:100%; width:50%; overflow:hidden;
+  }
+  .reveal-half.left{ left:0; }
+  .reveal-half.right{ right:0; }
+  .reveal-half img{
+    position:absolute; top:0; height:100%; width:100vw; object-fit:cover;
+  }
+  .reveal-half.left img{ left:0; }
+  .reveal-half.right img{ right:0; }
+  .reveal-caption{
+    position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+    z-index:5; pointer-events:none;
+  }
+
+  #hero-content{ opacity:0; }
+
+  /* subtle grain / texture */
+  .texture::before{
+    content:""; position:absolute; inset:0; pointer-events:none; opacity:.035;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  .card-lift{ transition: transform .45s cubic-bezier(.2,.8,.2,1), box-shadow .45s ease; }
+  .card-lift:hover{ transform: translateY(-8px); box-shadow: 0 24px 48px -20px rgba(30,61,43,0.25); }
+
+  .btn-primary{ transition: transform .3s ease, background-color .3s ease, box-shadow .3s ease; }
+  .btn-primary:hover{ transform: translateY(-3px); box-shadow: 0 14px 30px -10px rgba(30,61,43,0.45); }
+
+  .icon-badge{ transition: transform .4s cubic-bezier(.2,.8,.2,1), background-color .4s ease; }
+  .icon-badge:hover{ transform: rotate(-8deg) scale(1.08); }
+
+  .reveal-up{ opacity:0; transform: translateY(40px); }
+  .reveal-fade{ opacity:0; }
+  .reveal-scale{ opacity:0; transform: scale(.9); }
+
+  /* nav underline */
+  .nav-link{ position:relative; }
+  .nav-link::after{
+    content:""; position:absolute; left:0; bottom:-6px; width:0%; height:2px; background:#C9A659;
+    transition: width .3s ease;
+  }
+  .nav-link:hover::after{ width:100%; }
+
+  /* whatsapp float */
+  .wa-pulse::before{
+    content:""; position:absolute; inset:0; border-radius:9999px; background:#25D366; opacity:.5;
+    animation: waPulse 2.2s ease-out infinite;
+  }
+  @keyframes waPulse{
+    0%{ transform: scale(1); opacity:.5; }
+    100%{ transform: scale(1.9); opacity:0; }
+  }
+
+  /* testimonial slider */
+  .testi-track{ transition: transform .6s cubic-bezier(.2,.8,.2,1); }
+
+  .step-connector{ background-image: repeating-linear-gradient(90deg, #C9A659 0, #C9A659 8px, transparent 8px, transparent 16px); }
+
+  ::-webkit-scrollbar{ width:10px; }
+  ::-webkit-scrollbar-track{ background:#F6F1E7; }
+  ::-webkit-scrollbar-thumb{ background:#8A9A7E; border-radius:8px; }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; }
+  }
+
+  .focus-ring:focus-visible{ outline: 3px solid #C9A659; outline-offset:3px; }
+</style>
+</head>
+<body class="bg-cream text-charcoal">
+
+<!-- ================= HERO SPLIT REVEAL OVERLAY ================= -->
+<div id="hero-reveal-overlay" aria-hidden="true">
+  <div class="reveal-half left">
+    <img src="https://images.unsplash.com/photo-1547592166-23ac45744acd?auto=format&fit=crop&w=1600&q=80" alt="">
+  </div>
+  <div class="reveal-half right">
+    <img src="https://images.unsplash.com/photo-1547592166-23ac45744acd?auto=format&fit=crop&w=1600&q=80" alt="">
+  </div>
+  <div class="reveal-caption">
+    <span class="font-display italic text-2xl md:text-3xl text-ivory tracking-wide drop-shadow-lg" id="reveal-word">NutriDemo</span>
+  </div>
+</div>
+
+<!-- ================= NAVBAR ================= -->
+<header id="site-nav" class="fixed top-0 inset-x-0 z-50 transition-all duration-300 bg-ivory/90 backdrop-blur-md border-b border-forest/5">
+  <nav class="max-w-7xl mx-auto px-6 lg:px-10 h-20 flex items-center justify-between">
+    <a href="#home" class="font-display text-2xl md:text-[1.7rem] text-forest tracking-tight">NutriDemo<span class="text-gold">.</span></a>
+
+    <ul class="hidden lg:flex items-center gap-9 text-sm font-medium text-charcoal/80 eyebrow uppercase tracking-wide" style="letter-spacing:.06em;">
+      <li><a href="#home" class="nav-link">Home</a></li>
+      <li><a href="#about" class="nav-link">About</a></li>
+      <li><a href="#services" class="nav-link">Services</a></li>
+      <li><a href="#testimonials" class="nav-link">Testimonials</a></li>
+      <li><a href="#process" class="nav-link">Blog</a></li>
+      <li><a href="#contact" class="nav-link">Contact</a></li>
+    </ul>
+
+    <a href="#contact" class="hidden lg:inline-flex btn-primary items-center gap-2 bg-forest text-ivory text-sm font-semibold px-6 py-3 rounded-full hover:bg-forestDeep">
+      Book Consultation
+    </a>
+
+    <button id="menu-toggle" class="lg:hidden text-forest text-2xl focus-ring" aria-label="Open menu" aria-expanded="false">
+      <i class="fa-solid fa-bars"></i>
+    </button>
+  </nav>
+
+  <!-- mobile menu -->
+  <div id="mobile-menu" class="lg:hidden max-h-0 overflow-hidden transition-all duration-500 bg-ivory border-t border-forest/5">
+    <ul class="flex flex-col px-6 py-4 gap-4 text-charcoal font-medium">
+      <li><a href="#home" class="mobile-link block py-1">Home</a></li>
+      <li><a href="#about" class="mobile-link block py-1">About</a></li>
+      <li><a href="#services" class="mobile-link block py-1">Services</a></li>
+      <li><a href="#testimonials" class="mobile-link block py-1">Testimonials</a></li>
+      <li><a href="#process" class="mobile-link block py-1">Blog</a></li>
+      <li><a href="#contact" class="mobile-link block py-1">Contact</a></li>
+      <li><a href="#contact" class="mobile-link inline-block bg-forest text-ivory text-center px-6 py-3 rounded-full font-semibold mt-2">Book Consultation</a></li>
+    </ul>
+  </div>
+</header>
+
+<!-- ================= HERO ================= -->
+<section id="home" class="relative pt-20 min-h-screen bg-ivory texture overflow-hidden">
+  <div id="hero-content" class="relative max-w-7xl mx-auto px-6 lg:px-10 pt-14 pb-20 grid grid-cols-1 lg:grid-cols-[1fr_1.3fr_1fr] items-center gap-10">
+
+    <!-- left plate -->
+    <div class="hidden lg:block relative">
+      <div class="rounded-full overflow-hidden aspect-square shadow-2xl ring-8 ring-ivory rotate-[-6deg]" id="hero-img-left">
+        <img src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=900&q=80" alt="Fresh avocado and vegetable bowl" class="w-full h-full object-cover">
+      </div>
+      <div class="absolute -bottom-4 -right-4 bg-gold text-forest text-xs font-bold px-4 py-2 rounded-full shadow-lg rotate-3">100% Whole Foods</div>
+    </div>
+
+    <!-- center copy -->
+    <div class="text-center">
+      <p class="eyebrow uppercase text-gold font-semibold text-xs mb-4" style="letter-spacing:.28em;">Clinical Nutritionist</p>
+      <h1 class="font-display text-4xl sm:text-5xl md:text-6xl leading-[1.08] text-forest mb-6">
+        Nourish Your Body.<br><span class="italic text-gold">Transform</span> Your Life.
+      </h1>
+      <p class="text-charcoal/70 max-w-md mx-auto mb-9 text-base md:text-lg">
+        Personalized nutrition plans for PCOS, weight management, thyroid, diabetes &amp; overall wellness.
+      </p>
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+        <a href="#contact" class="btn-primary bg-forest text-ivory font-semibold px-8 py-4 rounded-full hover:bg-forestDeep">Book Consultation</a>
+        <a href="https://wa.me/919876543210" target="_blank" rel="noopener" class="btn-primary inline-flex items-center gap-2 border-2 border-forest/15 bg-white text-forest font-semibold px-8 py-4 rounded-full hover:border-forest">
+          <i class="fa-brands fa-whatsapp text-lg text-[#25D366]"></i> WhatsApp Now
+        </a>
+      </div>
+      <div class="mt-14 flex justify-center">
+        <a href="#about" class="text-forest/50 hover:text-forest transition text-xl animate-bounce" aria-label="Scroll down">
+          <i class="fa-solid fa-arrow-down"></i>
+        </a>
+      </div>
+    </div>
+
+    <!-- right plate -->
+    <div class="hidden lg:block relative">
+      <div class="rounded-full overflow-hidden aspect-square shadow-2xl ring-8 ring-ivory rotate-[6deg]" id="hero-img-right">
+        <img src="https://images.unsplash.com/photo-1490645935967-10de6ba17061?auto=format&fit=crop&w=900&q=80" alt="Colorful roasted vegetable and grain bowl" class="w-full h-full object-cover">
+      </div>
+      <div class="absolute -top-4 -left-4 bg-forest text-ivory text-xs font-bold px-4 py-2 rounded-full shadow-lg -rotate-3">Made for You</div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= ABOUT / APPROACH ================= -->
+<section id="about" class="relative py-24 md:py-32 bg-cream">
+  <div class="max-w-7xl mx-auto px-6 lg:px-10">
+    <div class="text-center max-w-2xl mx-auto mb-16 reveal-up">
+      <p class="eyebrow uppercase text-gold font-semibold text-xs mb-3" style="letter-spacing:.28em;">It's Not About Diets</p>
+      <h2 class="font-display text-3xl md:text-5xl text-forest leading-tight">It's About <span class="italic text-gold">Understanding</span> You.</h2>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div class="reveal-up card-lift bg-ivory rounded-xl2 p-8 border border-forest/5">
+        <div class="icon-badge w-14 h-14 rounded-2xl bg-sageLight text-forest flex items-center justify-center text-xl mb-6">
+          <i class="fa-solid fa-magnifying-glass"></i>
+        </div>
+        <h3 class="font-display text-xl text-forest mb-2">Root Cause Analysis</h3>
+        <p class="text-sm text-charcoal/65 leading-relaxed">Identify the real reason behind your struggles — not just the symptoms.</p>
+      </div>
+
+      <div class="reveal-up card-lift bg-ivory rounded-xl2 p-8 border border-forest/5">
+        <div class="icon-badge w-14 h-14 rounded-2xl bg-sageLight text-forest flex items-center justify-center text-xl mb-6">
+          <i class="fa-solid fa-clipboard-list"></i>
+        </div>
+        <h3 class="font-display text-xl text-forest mb-2">Personalized Plans</h3>
+        <p class="text-sm text-charcoal/65 leading-relaxed">Made for your body, routine &amp; food preferences — never generic.</p>
+      </div>
+
+      <div class="reveal-up card-lift bg-ivory rounded-xl2 p-8 border border-forest/5">
+        <div class="icon-badge w-14 h-14 rounded-2xl bg-sageLight text-forest flex items-center justify-center text-xl mb-6">
+          <i class="fa-solid fa-leaf"></i>
+        </div>
+        <h3 class="font-display text-xl text-forest mb-2">Sustainable Results</h3>
+        <p class="text-sm text-charcoal/65 leading-relaxed">Build healthy habits that actually last, without extreme restriction.</p>
+      </div>
+
+      <div class="reveal-up card-lift bg-ivory rounded-xl2 p-8 border border-forest/5">
+        <div class="icon-badge w-14 h-14 rounded-2xl bg-sageLight text-forest flex items-center justify-center text-xl mb-6">
+          <i class="fa-solid fa-comments"></i>
+        </div>
+        <h3 class="font-display text-xl text-forest mb-2">Continuous Support</h3>
+        <p class="text-sm text-charcoal/65 leading-relaxed">I'm with you at every step of your journey, not just at the start.</p>
+      </div>
+    </div>
+
+    <div class="text-center mt-14 reveal-up">
+      <a href="#process" class="btn-primary inline-block bg-forest text-ivory font-semibold px-8 py-4 rounded-full hover:bg-forestDeep">My Approach</a>
+    </div>
+  </div>
+</section>
+
+<!-- ================= HOW WE WORK (PROCESS) ================= -->
+<section id="process" class="relative py-24 md:py-32 bg-ivory overflow-hidden">
+  <div class="max-w-7xl mx-auto px-6 lg:px-10">
+    <div class="text-center max-w-xl mx-auto mb-20 reveal-up">
+      <p class="eyebrow uppercase text-gold font-semibold text-xs mb-3" style="letter-spacing:.28em;">Your Journey With NutriDemo</p>
+      <h2 class="font-display text-3xl md:text-5xl text-forest">How We Work Together</h2>
+    </div>
+
+    <div class="grid grid-cols-2 md:grid-cols-5 gap-x-4 gap-y-14 relative">
+      <!-- connector line for desktop -->
+      <div class="hidden md:block absolute top-9 left-[10%] right-[10%] h-[2px] step-connector"></div>
+
+      <div class="reveal-up relative flex flex-col items-center text-center">
+        <div class="relative z-10 w-[72px] h-[72px] rounded-full bg-forest text-ivory flex items-center justify-center text-2xl shadow-lg mb-5">
+          <i class="fa-solid fa-clipboard-check"></i>
+        </div>
+        <span class="text-xs font-bold text-gold mb-1">STEP 01</span>
+        <h3 class="font-display text-lg text-forest mb-2">Assess</h3>
+        <p class="text-xs text-charcoal/60 leading-relaxed max-w-[160px]">We understand your health history, lifestyle, eating habits &amp; goals.</p>
+      </div>
+
+      <div class="reveal-up relative flex flex-col items-center text-center">
+        <div class="relative z-10 w-[72px] h-[72px] rounded-full bg-forest text-ivory flex items-center justify-center text-2xl shadow-lg mb-5">
+          <i class="fa-solid fa-bowl-food"></i>
+        </div>
+        <span class="text-xs font-bold text-gold mb-1">STEP 02</span>
+        <h3 class="font-display text-lg text-forest mb-2">Plan</h3>
+        <p class="text-xs text-charcoal/60 leading-relaxed max-w-[160px]">A customized nutrition plan designed specially for your body.</p>
+      </div>
+
+      <div class="reveal-up relative flex flex-col items-center text-center">
+        <div class="relative z-10 w-[72px] h-[72px] rounded-full bg-forest text-ivory flex items-center justify-center text-2xl shadow-lg mb-5">
+          <i class="fa-solid fa-utensils"></i>
+        </div>
+        <span class="text-xs font-bold text-gold mb-1">STEP 03</span>
+        <h3 class="font-display text-lg text-forest mb-2">Implement</h3>
+        <p class="text-xs text-charcoal/60 leading-relaxed max-w-[160px]">Simple, practical &amp; tasty meals that fit your real lifestyle.</p>
+      </div>
+
+      <div class="reveal-up relative flex flex-col items-center text-center">
+        <div class="relative z-10 w-[72px] h-[72px] rounded-full bg-forest text-ivory flex items-center justify-center text-2xl shadow-lg mb-5">
+          <i class="fa-solid fa-chart-line"></i>
+        </div>
+        <span class="text-xs font-bold text-gold mb-1">STEP 04</span>
+        <h3 class="font-display text-lg text-forest mb-2">Track &amp; Improve</h3>
+        <p class="text-xs text-charcoal/60 leading-relaxed max-w-[160px]">We track progress and make adjustments for better results.</p>
+      </div>
+
+      <div class="reveal-up relative flex flex-col items-center text-center">
+        <div class="relative z-10 w-[72px] h-[72px] rounded-full bg-gold text-forest flex items-center justify-center text-2xl shadow-lg mb-5">
+          <i class="fa-solid fa-sun"></i>
+        </div>
+        <span class="text-xs font-bold text-gold mb-1">STEP 05</span>
+        <h3 class="font-display text-lg text-forest mb-2">Transform</h3>
+        <p class="text-xs text-charcoal/60 leading-relaxed max-w-[160px]">Better energy, improved health &amp; a happier, confident you.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= AREAS I CAN HELP WITH ================= -->
+<section id="services" class="relative py-24 md:py-32 bg-forest text-ivory overflow-hidden">
+  <div class="absolute inset-0 opacity-[0.14]">
+    <img src="https://images.unsplash.com/photo-1543362906-acfc16c67564?auto=format&fit=crop&w=1600&q=80" alt="" class="w-full h-full object-cover">
+  </div>
+  <div class="absolute inset-0 bg-gradient-to-r from-forest via-forest/95 to-forest/60"></div>
+
+  <div class="relative max-w-7xl mx-auto px-6 lg:px-10">
+    <div class="max-w-xl mb-16 reveal-up">
+      <p class="eyebrow uppercase text-gold font-semibold text-xs mb-3" style="letter-spacing:.28em;">Specialities</p>
+      <h2 class="font-display text-3xl md:text-5xl">Areas I Can Help You With</h2>
+    </div>
+
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-5">
+      <div class="reveal-up card-lift bg-ivory/5 border border-ivory/15 rounded-xl2 p-6 text-center backdrop-blur-sm">
+        <div class="icon-badge w-14 h-14 mx-auto rounded-full bg-gold/20 text-gold flex items-center justify-center text-xl mb-4"><i class="fa-solid fa-venus"></i></div>
+        <h3 class="font-medium text-sm">PCOS / PCOD</h3>
+      </div>
+      <div class="reveal-up card-lift bg-ivory/5 border border-ivory/15 rounded-xl2 p-6 text-center backdrop-blur-sm">
+        <div class="icon-badge w-14 h-14 mx-auto rounded-full bg-gold/20 text-gold flex items-center justify-center text-xl mb-4"><i class="fa-solid fa-weight-scale"></i></div>
+        <h3 class="font-medium text-sm">Weight Management</h3>
+      </div>
+      <div class="reveal-up card-lift bg-ivory/5 border border-ivory/15 rounded-xl2 p-6 text-center backdrop-blur-sm">
+        <div class="icon-badge w-14 h-14 mx-auto rounded-full bg-gold/20 text-gold flex items-center justify-center text-xl mb-4"><i class="fa-solid fa-heart-pulse"></i></div>
+        <h3 class="font-medium text-sm">Thyroid Management</h3>
+      </div>
+      <div class="reveal-up card-lift bg-ivory/5 border border-ivory/15 rounded-xl2 p-6 text-center backdrop-blur-sm">
+        <div class="icon-badge w-14 h-14 mx-auto rounded-full bg-gold/20 text-gold flex items-center justify-center text-xl mb-4"><i class="fa-solid fa-droplet"></i></div>
+        <h3 class="font-medium text-sm">Diabetes Management</h3>
+      </div>
+      <div class="reveal-up card-lift bg-ivory/5 border border-ivory/15 rounded-xl2 p-6 text-center backdrop-blur-sm">
+        <div class="icon-badge w-14 h-14 mx-auto rounded-full bg-gold/20 text-gold flex items-center justify-center text-xl mb-4"><i class="fa-solid fa-scale-balanced"></i></div>
+        <h3 class="font-medium text-sm">Hormonal Imbalance</h3>
+      </div>
+      <div class="reveal-up card-lift bg-ivory/5 border border-ivory/15 rounded-xl2 p-6 text-center backdrop-blur-sm">
+        <div class="icon-badge w-14 h-14 mx-auto rounded-full bg-gold/20 text-gold flex items-center justify-center text-xl mb-4"><i class="fa-solid fa-seedling"></i></div>
+        <h3 class="font-medium text-sm">Digestive Health</h3>
+      </div>
+      <div class="reveal-up card-lift bg-ivory/5 border border-ivory/15 rounded-xl2 p-6 text-center backdrop-blur-sm">
+        <div class="icon-badge w-14 h-14 mx-auto rounded-full bg-gold/20 text-gold flex items-center justify-center text-xl mb-4"><i class="fa-solid fa-spa"></i></div>
+        <h3 class="font-medium text-sm">Skin &amp; Hair Nutrition</h3>
+      </div>
+      <div class="reveal-up card-lift bg-ivory/5 border border-ivory/15 rounded-xl2 p-6 text-center backdrop-blur-sm">
+        <div class="icon-badge w-14 h-14 mx-auto rounded-full bg-gold/20 text-gold flex items-center justify-center text-xl mb-4"><i class="fa-solid fa-baby"></i></div>
+        <h3 class="font-medium text-sm">Pre &amp; Post Pregnancy</h3>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= TESTIMONIALS ================= -->
+<section id="testimonials" class="relative py-24 md:py-32 bg-cream">
+  <div class="max-w-5xl mx-auto px-6 lg:px-10">
+    <div class="text-center mb-16 reveal-up">
+      <p class="eyebrow uppercase text-gold font-semibold text-xs mb-3" style="letter-spacing:.28em;">Real People, Real Results</p>
+      <h2 class="font-display text-3xl md:text-5xl text-forest">Client Love</h2>
+    </div>
+
+    <div class="relative overflow-hidden">
+      <div id="testi-track" class="testi-track flex">
+        <!-- slide 1 -->
+        <div class="w-full flex-shrink-0 px-2">
+          <div class="grid md:grid-cols-3 gap-6">
+            <div class="bg-ivory rounded-xl2 p-8 border border-forest/5">
+              <div class="flex items-center gap-3 mb-4">
+                <img src="https://randomuser.me/api/portraits/women/44.jpg" class="w-12 h-12 rounded-full object-cover" alt="Sonia R.">
+                <div>
+                  <h4 class="font-semibold text-forest text-sm">Sonia R.</h4>
+                  <div class="text-gold text-xs"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+                </div>
+              </div>
+              <p class="text-sm text-charcoal/70 leading-relaxed">"Lost 7 kgs in 3 months with sustainable changes. My PCOS symptoms are so much better now!"</p>
+            </div>
+            <div class="bg-ivory rounded-xl2 p-8 border border-forest/5">
+              <div class="flex items-center gap-3 mb-4">
+                <img src="https://randomuser.me/api/portraits/women/68.jpg" class="w-12 h-12 rounded-full object-cover" alt="Priya M.">
+                <div>
+                  <h4 class="font-semibold text-forest text-sm">Priya M.</h4>
+                  <div class="text-gold text-xs"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+                </div>
+              </div>
+              <p class="text-sm text-charcoal/70 leading-relaxed">"My thyroid levels are balanced now and I have so much more energy every day."</p>
+            </div>
+            <div class="bg-ivory rounded-xl2 p-8 border border-forest/5">
+              <div class="flex items-center gap-3 mb-4">
+                <img src="https://randomuser.me/api/portraits/women/32.jpg" class="w-12 h-12 rounded-full object-cover" alt="Kavita S.">
+                <div>
+                  <h4 class="font-semibold text-forest text-sm">Kavita S.</h4>
+                  <div class="text-gold text-xs"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+                </div>
+              </div>
+              <p class="text-sm text-charcoal/70 leading-relaxed">"Finally found a nutrition plan that fits my lifestyle and my taste buds too!"</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- slide 2 -->
+        <div class="w-full flex-shrink-0 px-2">
+          <div class="grid md:grid-cols-3 gap-6">
+            <div class="bg-ivory rounded-xl2 p-8 border border-forest/5">
+              <div class="flex items-center gap-3 mb-4">
+                <img src="https://randomuser.me/api/portraits/women/21.jpg" class="w-12 h-12 rounded-full object-cover" alt="Neha T.">
+                <div>
+                  <h4 class="font-semibold text-forest text-sm">Neha T.</h4>
+                  <div class="text-gold text-xs"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+                </div>
+              </div>
+              <p class="text-sm text-charcoal/70 leading-relaxed">"My blood sugar is finally under control without feeling like I'm on a diet."</p>
+            </div>
+            <div class="bg-ivory rounded-xl2 p-8 border border-forest/5">
+              <div class="flex items-center gap-3 mb-4">
+                <img src="https://randomuser.me/api/portraits/women/56.jpg" class="w-12 h-12 rounded-full object-cover" alt="Anjali D.">
+                <div>
+                  <h4 class="font-semibold text-forest text-sm">Anjali D.</h4>
+                  <div class="text-gold text-xs"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+                </div>
+              </div>
+              <p class="text-sm text-charcoal/70 leading-relaxed">"Postpartum, I felt lost about food. This plan gave me back my energy and confidence."</p>
+            </div>
+            <div class="bg-ivory rounded-xl2 p-8 border border-forest/5">
+              <div class="flex items-center gap-3 mb-4">
+                <img src="https://randomuser.me/api/portraits/women/12.jpg" class="w-12 h-12 rounded-full object-cover" alt="Radhika V.">
+                <div>
+                  <h4 class="font-semibold text-forest text-sm">Radhika V.</h4>
+                  <div class="text-gold text-xs"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+                </div>
+              </div>
+              <p class="text-sm text-charcoal/70 leading-relaxed">"My skin cleared up and my digestion improved within weeks. Truly life-changing."</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex justify-center gap-2 mt-10" id="testi-dots">
+        <button class="testi-dot w-2.5 h-2.5 rounded-full bg-forest transition-all" data-index="0" aria-label="Show testimonial slide 1"></button>
+        <button class="testi-dot w-2.5 h-2.5 rounded-full bg-forest/25 transition-all" data-index="1" aria-label="Show testimonial slide 2"></button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= FINAL CTA ================= -->
+<section class="relative py-20 md:py-28 bg-forestDeep text-ivory overflow-hidden">
+  <div class="max-w-7xl mx-auto px-6 lg:px-10 grid md:grid-cols-2 gap-12 items-center">
+    <div class="reveal-up order-2 md:order-1">
+      <img src="https://images.unsplash.com/photo-1512058564366-18510be2db19?auto=format&fit=crop&w=900&q=80" alt="Fresh nutrient dense bowl" class="rounded-xl2 shadow-2xl w-full h-[320px] md:h-[400px] object-cover">
+    </div>
+    <div class="reveal-up order-1 md:order-2">
+      <h2 class="font-display text-3xl md:text-5xl leading-tight mb-6">Ready to Begin Your <span class="italic text-gold">Transformation</span>?</h2>
+      <ul class="space-y-3 mb-9 text-ivory/85">
+        <li class="flex items-center gap-3"><i class="fa-solid fa-circle-check text-gold"></i> 1:1 Personalized Consultation</li>
+        <li class="flex items-center gap-3"><i class="fa-solid fa-circle-check text-gold"></i> Custom Nutrition Plan</li>
+        <li class="flex items-center gap-3"><i class="fa-solid fa-circle-check text-gold"></i> Ongoing Support &amp; Guidance</li>
+      </ul>
+      <div class="flex flex-col sm:flex-row gap-4">
+        <a href="#contact" class="btn-primary bg-ivory text-forest font-semibold px-8 py-4 rounded-full text-center hover:bg-white">Book Your Consultation</a>
+        <a href="https://wa.me/919876543210" target="_blank" rel="noopener" class="btn-primary inline-flex items-center justify-center gap-2 bg-[#25D366] text-ivory font-semibold px-8 py-4 rounded-full hover:brightness-105">
+          <i class="fa-brands fa-whatsapp"></i> Chat on WhatsApp
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= FOOTER ================= -->
+<footer id="contact" class="bg-forest text-ivory/85 pt-20 pb-8">
+  <div class="max-w-7xl mx-auto px-6 lg:px-10 grid grid-cols-2 md:grid-cols-5 gap-10 mb-14">
+    <div class="col-span-2">
+      <a href="#home" class="font-display text-2xl text-ivory">NutriDemo<span class="text-gold">.</span></a>
+      <p class="text-xs uppercase tracking-widest text-ivory/50 mt-1 mb-5" style="letter-spacing:.2em;">Nutrition. Balance. You.</p>
+      <p class="text-sm text-ivory/60 max-w-xs leading-relaxed">Evidence-based, personalized nutrition coaching to help you feel strong, balanced and truly well — for life.</p>
+    </div>
+    <div>
+      <h4 class="font-semibold text-ivory mb-4 text-sm">Quick Links</h4>
+      <ul class="space-y-2 text-sm text-ivory/60">
+        <li><a href="#home" class="hover:text-gold transition">Home</a></li>
+        <li><a href="#about" class="hover:text-gold transition">About</a></li>
+        <li><a href="#services" class="hover:text-gold transition">Services</a></li>
+        <li><a href="#process" class="hover:text-gold transition">Blog</a></li>
+        <li><a href="#contact" class="hover:text-gold transition">Contact</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4 class="font-semibold text-ivory mb-4 text-sm">Our Services</h4>
+      <ul class="space-y-2 text-sm text-ivory/60">
+        <li>PCOS / PCOD</li>
+        <li>Weight Management</li>
+        <li>Thyroid Management</li>
+        <li>Diabetes Management</li>
+        <li>Hormonal Health</li>
+      </ul>
+    </div>
+    <div>
+      <h4 class="font-semibold text-ivory mb-4 text-sm">Contact</h4>
+      <ul class="space-y-3 text-sm text-ivory/60">
+        <li class="flex items-center gap-2"><i class="fa-solid fa-phone text-gold text-xs"></i> +91 98765 43210</li>
+        <li class="flex items-center gap-2"><i class="fa-solid fa-envelope text-gold text-xs"></i> hello@nutridemo.com</li>
+        <li class="flex items-center gap-2"><i class="fa-solid fa-location-dot text-gold text-xs"></i> Mumbai, India</li>
+      </ul>
+      <div class="flex gap-3 mt-5">
+        <a href="#" class="w-9 h-9 rounded-full bg-ivory/10 flex items-center justify-center hover:bg-gold hover:text-forest transition" aria-label="Instagram"><i class="fa-brands fa-instagram text-sm"></i></a>
+        <a href="#" class="w-9 h-9 rounded-full bg-ivory/10 flex items-center justify-center hover:bg-gold hover:text-forest transition" aria-label="Facebook"><i class="fa-brands fa-facebook-f text-sm"></i></a>
+        <a href="#" class="w-9 h-9 rounded-full bg-ivory/10 flex items-center justify-center hover:bg-gold hover:text-forest transition" aria-label="YouTube"><i class="fa-brands fa-youtube text-sm"></i></a>
+      </div>
+    </div>
+  </div>
+  <div class="max-w-7xl mx-auto px-6 lg:px-10 pt-6 border-t border-ivory/10 text-xs text-ivory/45 flex flex-col sm:flex-row justify-between gap-2">
+    <span>&copy; <span id="year"></span> NutriDemo. All rights reserved.</span>
+    <span>Designed with care for your wellbeing.</span>
+  </div>
+</footer>
+
+<!-- WhatsApp floating button -->
+<a href="https://wa.me/919876543210" target="_blank" rel="noopener" aria-label="Chat on WhatsApp"
+   class="fixed bottom-6 right-6 z-40 w-14 h-14 rounded-full bg-[#25D366] text-white flex items-center justify-center text-2xl shadow-2xl relative">
+  <span class="wa-pulse absolute inset-0 rounded-full"></span>
+  <i class="fa-brands fa-whatsapp relative z-10"></i>
+</a>
+
+<!-- Back to top -->
+<button id="back-to-top" aria-label="Back to top"
+  class="fixed bottom-6 left-6 z-40 w-11 h-11 rounded-full bg-forest text-ivory flex items-center justify-center shadow-xl opacity-0 pointer-events-none transition-all duration-300">
+  <i class="fa-solid fa-arrow-up"></i>
+</button>
+
+<script>
+document.getElementById('year').textContent = new Date().getFullYear();
+
+/* ---------------- Mobile menu ---------------- */
+const menuToggle = document.getElementById('menu-toggle');
+const mobileMenu = document.getElementById('mobile-menu');
+let menuOpen = false;
+menuToggle.addEventListener('click', () => {
+  menuOpen = !menuOpen;
+  mobileMenu.style.maxHeight = menuOpen ? mobileMenu.scrollHeight + 'px' : '0px';
+  menuToggle.innerHTML = menuOpen ? '<i class="fa-solid fa-xmark"></i>' : '<i class="fa-solid fa-bars"></i>';
+  menuToggle.setAttribute('aria-expanded', menuOpen);
+});
+document.querySelectorAll('.mobile-link').forEach(link => {
+  link.addEventListener('click', () => {
+    menuOpen = false;
+    mobileMenu.style.maxHeight = '0px';
+    menuToggle.innerHTML = '<i class="fa-solid fa-bars"></i>';
+  });
+});
+
+/* ---------------- Nav shadow on scroll + back to top ---------------- */
+const nav = document.getElementById('site-nav');
+const backToTop = document.getElementById('back-to-top');
+window.addEventListener('scroll', () => {
+  if (window.scrollY > 40) {
+    nav.classList.add('shadow-md');
+  } else {
+    nav.classList.remove('shadow-md');
+  }
+  if (window.scrollY > 600) {
+    backToTop.classList.remove('opacity-0', 'pointer-events-none');
+  } else {
+    backToTop.classList.add('opacity-0', 'pointer-events-none');
+  }
+});
+backToTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+/* ---------------- Testimonial slider ---------------- */
+const track = document.getElementById('testi-track');
+const dots = document.querySelectorAll('.testi-dot');
+let currentSlide = 0;
+const totalSlides = dots.length;
+
+function goToSlide(i) {
+  currentSlide = i;
+  track.style.transform = `translateX(-${i * 100}%)`;
+  dots.forEach((d, idx) => {
+    d.classList.toggle('bg-forest', idx === i);
+    d.classList.toggle('bg-forest/25', idx !== i);
+  });
+}
+dots.forEach((dot, i) => dot.addEventListener('click', () => goToSlide(i)));
+setInterval(() => goToSlide((currentSlide + 1) % totalSlides), 5500);
+
+/* ---------------- Hero split reveal (GSAP) ---------------- */
+window.addEventListener('load', () => {
+  document.body.style.overflow = 'hidden';
+
+  const tl = gsap.timeline({
+    defaults: { ease: 'power4.inOut' },
+    onComplete: () => {
+      document.getElementById('hero-reveal-overlay').style.display = 'none';
+      document.body.style.overflow = '';
+      ScrollTrigger.refresh();
+    }
+  });
+
+  tl.to('#reveal-word', { opacity: 0, duration: 0.5, delay: 0.9 })
+    .to('.reveal-half.left', { xPercent: -100, duration: 1.1 }, '<')
+    .to('.reveal-half.right', { xPercent: 100, duration: 1.1 }, '<')
+    .to('#hero-content', { opacity: 1, duration: 0.9 }, '-=0.6')
+    .from('#hero-img-left', { x: -60, opacity: 0, duration: 0.9 }, '<')
+    .from('#hero-img-right', { x: 60, opacity: 0, duration: 0.9 }, '<');
+
+  /* ---------------- Scroll reveal animations ---------------- */
+  gsap.registerPlugin(ScrollTrigger);
+
+  gsap.utils.toArray('.reveal-up').forEach((el) => {
+    gsap.to(el, {
+      opacity: 1, y: 0, duration: 0.9, ease: 'power3.out',
+      scrollTrigger: { trigger: el, start: 'top 88%' }
+    });
+  });
+
+  gsap.utils.toArray('.reveal-fade').forEach((el) => {
+    gsap.to(el, {
+      opacity: 1, duration: 1, ease: 'power2.out',
+      scrollTrigger: { trigger: el, start: 'top 88%' }
+    });
+  });
+
+  gsap.utils.toArray('.reveal-scale').forEach((el) => {
+    gsap.to(el, {
+      opacity: 1, scale: 1, duration: 0.9, ease: 'back.out(1.4)',
+      scrollTrigger: { trigger: el, start: 'top 88%' }
+    });
+  });
+
+  /* subtle parallax on hero plates */
+  gsap.to('#hero-img-left', {
+    y: 30, ease: 'none',
+    scrollTrigger: { trigger: '#home', start: 'top top', end: 'bottom top', scrub: 1 }
+  });
+  gsap.to('#hero-img-right', {
+    y: -30, ease: 'none',
+    scrollTrigger: { trigger: '#home', start: 'top top', end: 'bottom top', scrub: 1 }
+  });
+});
+
+/* Fallback: ensure hero content is visible if load event / GSAP is delayed */
+setTimeout(() => {
+  const overlay = document.getElementById('hero-reveal-overlay');
+  const content = document.getElementById('hero-content');
+  if (overlay && overlay.style.display !== 'none' && parseFloat(getComputedStyle(content).opacity) < 1) {
+    overlay.style.display = 'none';
+    content.style.opacity = 1;
+    document.body.style.overflow = '';
+  }
+}, 4000);
+</script>
+
+</body>
+</html>
